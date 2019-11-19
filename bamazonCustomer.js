@@ -19,13 +19,20 @@ connection.connect(function (err) {
 function allItems() {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw (err);
-        console.log(res);
+        for (var i = 0; i < res.length; i++) {
+        console.log("\x1b[96m***************************************\x1b[39m");
+        console.log("Item ID: " + res[i].item_id);
+        console.log("Product Name: " + res[i].product_name);
+        console.log("Department Name: " + res[i].department_name);
+        console.log("Price: " + res[i].price);
+        console.log("Stock: " + res[i].stock_quantity);
+        }
         inquirer
             .prompt([
                 {
                     name: "purchase",
                     type: "list",
-                    message: "Would you like to purchase now?",
+                    message: "\x1b[92mWould you like to purchase now?\x1b[39m",
                     choices: ["Yes", "No"]
                 }
             ]).then(function (answer) {
@@ -35,7 +42,7 @@ function allItems() {
                         break;
 
                     case 'No':
-                        console.log("Thank you for using Bamazon! See you soon!")
+                        console.log("\x1b[93mThank you for using Bamazon! See you soon!\x1b[39m")
                         connection.end();
                         break;
                 }
@@ -50,19 +57,19 @@ function idAndUnit() {
             {
                 name: "id",
                 type: "input",
-                message: "What is the ID number of the product you would like to purchase?",
+                message: "\x1b[92mWhat is the ID number of the product you would like to purchase?\x1b[39m",
                 validate: function (value) {
                     if (isNaN(value) === false) 
                     {
                         return true;
                     }
-                    return "Please enter a number.";  
+                    return "\x1b[92mPlease enter a number.\x1b[39m";  
                 }
             },
             {
                 name: "unit",
                 type: "input",
-                message: "How many units would you like to purchase?",
+                message: "\x1b[92mHow many units would you like to purchase?\x1b[39m",
                 validate: function (value) {
                     if (isNaN(value) === false) 
                     {
@@ -72,21 +79,25 @@ function idAndUnit() {
                 }
             }
         ]).then(function (answer) {
-            connection.query("SELECT * FROM products WHERE item_id=?", answer.id, function (res) {
+            connection.query("SELECT * FROM products WHERE item_id=?", answer.id, function (err, res) {
                 for (var i = 0; i < res.length; i++) {
                     if (answer.unit > res[i].stock_quantity) {
-                        console.log("Sorry! We do not have enough in stock. Please try again.");
+                        console.log("\x1b[93mSorry! We do not have enough in stock. Please try again.\x1b[39m");
+                        console.log("\x1b[96m***************************************\x1b[39m");
                         console.log("Item: " + res[i].product_name);
                         console.log("Department: " + res[i].department_name);
                         console.log("Price: " + res[i].price);
                         console.log("Stock: " + res[i].stock_quantity);
+                        console.log("\x1b[96m***************************************\x1b[39m");
                         newOrder();
                     } else {
+                        console.log("\x1b[96m***************************************\x1b[39m");
                         console.log("Item: " + res[i].product_name);
                         console.log("Department: " + res[i].department_name);
                         console.log("Price: " + res[i].price);
                         console.log("Quantity: " + answer.unit);
                         console.log("Total: " + res[i].price * answer.unit);
+                        console.log("\x1b[96m***************************************\x1b[39m");
 
                         var updateStock = res[i].stock_quantity - answer.unit;
                         var itemId = answer.id;
@@ -101,7 +112,7 @@ function updateDB(updateStock, itemId) {
     connection.query("UPDATE products SET ? WHERE ?", [{ stock_quantity: updateStock }, { item_id: itemId }],
         function (err) {
             if (err) throw err;
-            console.log("Your order has been placed. Thank you for your purchase.");
+            console.log("\x1b[93mYour order has been placed. Thank you for your purchase.\x1b[39m");
             newOrder();
         }
     );
@@ -112,16 +123,16 @@ function newOrder() {
         .prompt({
             name: "newOrder",
             type: "list",
-            message: "Would you like to place another order?",
+            message: "\x1b[92mWould you like to place another order?\x1b[39m",
             choices: ["Yes", "No"]
         })
         .then(function (answer) {
             if (answer.newOrder === "Yes") {
-                console.log("Great! Here are the items.")
+                console.log("\x1b[93mGreat!\x1b[39m")
                 idAndUnit();
             } else {
                 connection.end()
-                console.log("Thank you for using Bamazon! See you soon!")
+                console.log("\x1b[93mThank you for using Bamazon! See you soon!\x1b[39m")
             }
         });
 }

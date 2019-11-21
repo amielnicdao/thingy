@@ -137,7 +137,7 @@ function newOrder() {
         });
 }
 
-//should i create new table
+
 
 
 

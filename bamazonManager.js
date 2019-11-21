@@ -132,45 +132,58 @@ function updateDB(updateStock, itemId) {
     );
 };
 
-// function addToInventory() {
-//     inquirer
-//     .prompt([
-//         {
-//             name: "id",
-//             type: "input",
-//             message: "Please enter the ID number of the item you would like to add to.",
-//             validate: function (value) {
-//                 if (isNaN(value) === false) 
-//                 {
-//                     return true;
-//                 }
-//                 return "\x1b[92mPlease enter a number.\x1b[39m";  
-//             }
-//         },
-//         {
-//             name: "unit",
-//             type: "input",
-//             message: "How many units would you like to add?",
-//             validate: function (value) {
-//                 if (isNaN(value) === false) 
-//                 {
-//                     return true;
-//                 }
-//                 return "\x1b[92mPlease enter a number.\x1b[39m";
-//             }
-//           }
-//         ]).then(function (answer) {
-//             var itemId = answer.id;
-//             connection.query("SELECT * FROM products WHERE ?", [{item_id: itemId}], function (err, res) {
-//                 var updateStock = res[0].stock_quantity + answer.unit;
-//                 updateDB(updateStock, itemId);
-//                 if (err) throw (err);
-//                 console.log("You added " + answer.unit + "to the inventory.") 
-//             connection.query("UPDATE products SET ? WHERE ?", [{ stock_quantity: updateStock }, { item_id: itemId }], function (err, res) {
-//                 if (err) throw err;
-//             })
-//             })
-            
-//         }) 
-// }
-
+function addNewProduct() {
+    inquirer
+    .prompt([
+        {
+            name: "productName",
+            type: "input",
+            message: "Enter the product name of the item you would like to add."
+        },
+        {
+            name: "departmentName",
+            type: "input",
+            message: "Enter which department the product should go into.",
+            choices: ["Electronics", "Kitchen", "Accessories", "Clothing", "Returns"]
+        },
+        {
+            name: "price",
+            type: "input",
+            message: "Enter the price of the item.",
+            validate: function (value) {
+                if (isNaN(value) === false) 
+                {
+                    return true;
+                }
+                return false;
+            }
+        },
+        {
+            name: "quantity",
+            type: "input",
+            message: "Enter the quantity.",
+            validate: function (value) {
+                if (isNaN(value) === false) 
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+    ]).then (function (answer) {
+        connection.query("INSERT INTO products SET ? ", {
+            product_name: answer.productName,
+            department_name: answer.departmentName,
+            price: answer.price,
+            stock_quantity: answer.quantity
+        }, function (err, res) {
+            if (err) throw err;
+            console.log("\x1b[93mThe product has been added!\x1b[39m"),
+            console.log("Item: " + answer.productName),
+            console.log("Department: " + answer.departmentName),
+            console.log("Price: " + answer.price),
+            console.log("Quantity: " + answer.quantity)
+        }
+        )
+    })
+}

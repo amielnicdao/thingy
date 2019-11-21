@@ -56,8 +56,23 @@ function allItems() {
         console.log("Department Name: " + res[i].department_name);
         console.log("Price: " + res[i].price);
         console.log("Stock: " + res[i].stock_quantity);
-        }
+        };
     });
 };
 
+function viewLowInventory() {
+    connection.query("SELECT * FROM products", function (err, res) {
+        if (err) throw (err);
+        for (var i = 0; i < res.length; i++) {
+            if(res[i].stock_quantity < 5) {
+        console.log("\x1b[96m***************************************\x1b[39m");
+        console.log("Item ID: " + res[i].item_id);
+        console.log("Product Name: " + res[i].product_name);
+        console.log("Department Name: " + res[i].department_name);
+        console.log("Price: " + res[i].price);
+        console.log("Stock: " + res[i].stock_quantity);
+        };
+    };
+ });
+};
 

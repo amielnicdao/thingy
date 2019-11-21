@@ -76,3 +76,101 @@ function viewLowInventory() {
  });
 };
 
+function addToInventory() {
+    inquirer
+        .prompt([
+            {
+                name: "id",
+                type: "input",
+                message: "\x1b[92mWhat is the ID number of the product you would like to add to?\x1b[39m",
+                validate: function (value) {
+                    if (isNaN(value) === false) 
+                    {
+                        return true;
+                    }
+                    return "\x1b[92mPlease enter a number.\x1b[39m";  
+                }
+            },
+            {
+                name: "unit",
+                type: "input",
+                message: "\x1b[92mHow many units would you like to add?\x1b[39m",
+                validate: function (value) {
+                    if (isNaN(value) === false) 
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+        ]).then(function (answer) {
+            connection.query("SELECT * FROM products WHERE item_id=?", answer.id, function (err, res) {
+                for (var i = 0; i < res.length; i++) {
+                    if (answer.unit > res[i].stock_quantity) {
+                        console.log("\x1b[93mThe inventory has been updated!\x1b[39m");
+                        console.log("\x1b[96m***************************************\x1b[39m");
+                        console.log("Item: " + res[i].product_name);
+                        console.log("Department: " + res[i].department_name);
+                        console.log("Price: " + res[i].price);
+                        console.log("Quantity: " + answer.unit);
+                        console.log("\x1b[96m***************************************\x1b[39m");
+
+                        var updateStock = res[i].stock_quantity + answer.unit;
+                        var itemId = answer.id;
+                        updateDB(updateStock, itemId);
+                    }
+                }
+            });
+        });
+};
+
+function updateDB(updateStock, itemId) {
+    connection.query("UPDATE products SET ? WHERE ?", [{ stock_quantity: updateStock }, { item_id: itemId }],
+        function (err) {
+            if (err) throw err;
+        }
+    );
+};
+
+// function addToInventory() {
+//     inquirer
+//     .prompt([
+//         {
+//             name: "id",
+//             type: "input",
+//             message: "Please enter the ID number of the item you would like to add to.",
+//             validate: function (value) {
+//                 if (isNaN(value) === false) 
+//                 {
+//                     return true;
+//                 }
+//                 return "\x1b[92mPlease enter a number.\x1b[39m";  
+//             }
+//         },
+//         {
+//             name: "unit",
+//             type: "input",
+//             message: "How many units would you like to add?",
+//             validate: function (value) {
+//                 if (isNaN(value) === false) 
+//                 {
+//                     return true;
+//                 }
+//                 return "\x1b[92mPlease enter a number.\x1b[39m";
+//             }
+//           }
+//         ]).then(function (answer) {
+//             var itemId = answer.id;
+//             connection.query("SELECT * FROM products WHERE ?", [{item_id: itemId}], function (err, res) {
+//                 var updateStock = res[0].stock_quantity + answer.unit;
+//                 updateDB(updateStock, itemId);
+//                 if (err) throw (err);
+//                 console.log("You added " + answer.unit + "to the inventory.") 
+//             connection.query("UPDATE products SET ? WHERE ?", [{ stock_quantity: updateStock }, { item_id: itemId }], function (err, res) {
+//                 if (err) throw err;
+//             })
+//             })
+            
+//         }) 
+// }
+

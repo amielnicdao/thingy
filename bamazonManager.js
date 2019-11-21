@@ -28,7 +28,7 @@ function menu() {
     ]).then(function (answer) {
         switch(answer.menuOptions) {
             case 'View Products for Sale':
-                viewProducts();
+                allItems();
                 break;
             
             case 'View Low Inventory':
@@ -45,3 +45,19 @@ function menu() {
         }
     })
 }
+
+function allItems() {
+    connection.query("SELECT * FROM products", function (err, res) {
+        if (err) throw (err);
+        for (var i = 0; i < res.length; i++) {
+        console.log("\x1b[96m***************************************\x1b[39m");
+        console.log("Item ID: " + res[i].item_id);
+        console.log("Product Name: " + res[i].product_name);
+        console.log("Department Name: " + res[i].department_name);
+        console.log("Price: " + res[i].price);
+        console.log("Stock: " + res[i].stock_quantity);
+        }
+    });
+};
+
+

@@ -22,7 +22,7 @@ function menu() {
         {
             name: "menuOptions",
             type: "list",
-            message: "What would you like to do?",
+            message: "\x1b[92mWhat would you like to do?\x1b[39m",
             choices: ["View Products for Sale", "View Low Inventory", "Add to Inventory", "Add New Product"]
         }
     ]).then(function (answer) {
@@ -48,7 +48,7 @@ function menu() {
 
 function allItems() {
     connection.query("SELECT * FROM products", function (err, res) {
-        if (err) throw (err);
+        if (err) throw err;
         for (var i = 0; i < res.length; i++) {
         console.log("\x1b[96m***************************************\x1b[39m");
         console.log("Item ID: " + res[i].item_id);
@@ -57,12 +57,13 @@ function allItems() {
         console.log("Price: " + res[i].price);
         console.log("Stock: " + res[i].stock_quantity);
         };
-    });
+        menu();
+    });    
 };
 
 function viewLowInventory() {
     connection.query("SELECT * FROM products", function (err, res) {
-        if (err) throw (err);
+        if (err) throw err;
         for (var i = 0; i < res.length; i++) {
             if(res[i].stock_quantity < 5) {
         console.log("\x1b[96m***************************************\x1b[39m");
@@ -73,6 +74,7 @@ function viewLowInventory() {
         console.log("Stock: " + res[i].stock_quantity);
         };
     };
+        menu();
  });
 };
 
@@ -106,21 +108,22 @@ function addToInventory() {
         ]).then(function (answer) {
             connection.query("SELECT * FROM products WHERE item_id=?", answer.id, function (err, res) {
                 for (var i = 0; i < res.length; i++) {
-                    if (answer.unit > res[i].stock_quantity) {
                         console.log("\x1b[93mThe inventory has been updated!\x1b[39m");
                         console.log("\x1b[96m***************************************\x1b[39m");
                         console.log("Item: " + res[i].product_name);
                         console.log("Department: " + res[i].department_name);
                         console.log("Price: " + res[i].price);
-                        console.log("Quantity: " + answer.unit);
+                        console.log("Added Quantity: " + answer.unit);
                         console.log("\x1b[96m***************************************\x1b[39m");
 
                         var updateStock = res[i].stock_quantity + answer.unit;
                         var itemId = answer.id;
                         updateDB(updateStock, itemId);
-                    }
+                        menu();
+                    
                 }
             });
+            
         });
 };
 
@@ -138,18 +141,18 @@ function addNewProduct() {
         {
             name: "productName",
             type: "input",
-            message: "Enter the product name of the item you would like to add."
+            message: "\x1b[93mEnter the product name of the item you would like to add.\x1b[39m"
         },
         {
             name: "departmentName",
             type: "input",
-            message: "Enter which department the product should go into.",
+            message: "\x1b[93mEnter which department the product should go into.\x1b[39m",
             choices: ["Electronics", "Kitchen", "Accessories", "Clothing", "Returns"]
         },
         {
             name: "price",
             type: "input",
-            message: "Enter the price of the item.",
+            message: "\x1b[93mEnter the price of the item.\x1b[39m",
             validate: function (value) {
                 if (isNaN(value) === false) 
                 {
@@ -161,7 +164,7 @@ function addNewProduct() {
         {
             name: "quantity",
             type: "input",
-            message: "Enter the quantity.",
+            message: "\x1b[93mEnter the quantity.\x1b[39m",
             validate: function (value) {
                 if (isNaN(value) === false) 
                 {
@@ -183,6 +186,7 @@ function addNewProduct() {
             console.log("Department: " + answer.departmentName),
             console.log("Price: " + answer.price),
             console.log("Quantity: " + answer.quantity)
+            menu();
         }
         )
     })

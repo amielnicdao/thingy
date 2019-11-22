@@ -29,29 +29,29 @@ You will need to install the following to make your own Thingy:
 
     **Flow 2**: Clicking "Yes" will prompt the user for the ID of the product and quantity they want to purchase and another prompt asking if they would like to place another order. Clicking "Yes" will display list of items. Clicking "No" will log "Thank you for using Bamazon! See you soon!" and exit the app. 
 
-    ![Results](purchaseNow.PNG)
+    ![Results](purchaseNow.png)
 
     **No**
 
-    ![Results](no.PNG)
+    ![Results](no.png)
 
     **Flow 3**: Ordering an item that is greater than the available inventory will result in the app not letting the order to go through.
 
     **No Inventory**
     
-    ![Results](noInventory.PNG)
+    ![Results](noInventory.png)
 
     ### Table Results
 
     **Start**
     Pay attention to Item 14.
 
-    ![Results](startingTable.PNG)
+    ![Results](startingTable.png)
 
      **End**
     Pay attention to Item 14.
 
-    ![Results](endingTable.PNG)
+    ![Results](endingTable.png)
 
 ### How To Use Thingy (Manager Interface)
 
@@ -68,23 +68,23 @@ You will need to install the following to make your own Thingy:
 
     **Flow 3**: Clicking "Add to Inventory" will prompt the user for the ID number of the product they would like to add to and the quantity to be added. 
     
-    ![Results](addInventory.PNG)
+    ![Results](addInventory.png)
 
     **Flow 4**: Clicking "Add New Product" will prompt the user for the product name, the department the new item should go into, the price of the new item, and the quantity.
     
-    ![Results](addProduct.PNG)
+    ![Results](addProduct.png)
 
 
     ### Table Result
 
     **Start**
 
-    ![Results](endingTable.PNG)
+    ![Results](endingTable.png)
 
      **End**
     Item 15 added and Item 14 has more in stock now.
 
-    ![Results](managerTable.PNG)
+    ![Results](managerTable.png)
 
 
 ## Created By

@@ -100,7 +100,7 @@ You will need to install the following to make your own Thingy:
 * Dependencies:
     * mysql
     * inquirer
-*MySQL
+* MySQL
 
 ## Acknowledgments
 
